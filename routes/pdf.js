@@ -5,9 +5,13 @@ const router = express.Router();
 const { OpenAI } = require('openai');
 const pdfParse = require('pdf-parse');
 const fs = require('fs');
+const Tesseract = require('tesseract.js');
 const puppeteer = require('puppeteer');
 require('dotenv').config();
 const ejs = require('ejs');
+const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js');
+const { execSync } = require('child_process');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, path.join(__dirname, '../public/uploads'));
@@ -53,8 +57,7 @@ Your task:
 - For each test found:
   - Match it with the reference.
   - Check if it is below or above the normal range.
-  - If abnormal, include it in the result JSON.
-  - If normal, skip it.
+  - If abnormal or normal, include it in the result JSON.
 
 IMPORTANT:
 - Respond ONLY with valid JSON. No explanation or extra text.
@@ -101,17 +104,104 @@ ${referenceText}
 
 User Report:
 ${text}
+
+Patient Details:
+Name: ${patientDetails.name}
+Age: ${patientDetails.age}
+Gender: ${patientDetails.gender}
+Date: ${patientDetails.date}
+Accession No: ${patientDetails.accessionNo}
 `;
 
     const response = await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 4096,
-        temperature: 0.3
+        temperature: 0.7
     });
 
     return response.choices[0].message.content;
 }
+async function extractTextWithPdfjs(buffer) {
+    try {
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const pdf = await loadingTask.promise;
+
+        let text = '';
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            const pageText = content.items.map(item => item.str).join(' ');
+            text += pageText + '\n';
+        }
+
+        if (!text.trim()) {
+            throw new Error('PDF.js extracted no text. The PDF might be image-based or scanned.');
+        }
+
+        return text;
+    } catch (err) {
+        console.error('extractTextWithPdfjs error:', err.message);
+        throw err; // Let the outer function handle this
+    }
+}
+const { fromPath } = require("pdf2pic");
+
+async function extractTextWithOCR(pdfPath) {
+    const { execSync } = require('child_process');
+    // Check for ImageMagick (magick) before proceeding
+    try {
+        execSync('magick -version', { stdio: 'ignore' });
+    } catch (e) {
+        throw new Error('ImageMagick (magick) is not installed or not in your PATH. Please install it from https://imagemagick.org/script/download.php#windows and add it to your PATH.');
+    }
+    // Check for Ghostscript (required for PDF conversion)
+    try {
+        execSync('gswin64c --version', { stdio: 'ignore' });
+    } catch (e) {
+        throw new Error('Ghostscript (gswin64c) is not installed or not in your PATH. Please install it from https://ghostscript.com/download/gsdnld.html and add it to your PATH.');
+    }
+
+    const converter = fromPath(pdfPath, {
+        density: 150,        // good balance between speed & accuracy
+        saveFilename: "ocr_temp",
+        savePath: "./ocr-images",
+        format: "png",
+        width: 1200,
+        height: 1600,
+        useImageMagick: true // Force use of ImageMagick
+    });
+
+    try {
+        // Ensure ocr-images directory exists
+        if (!fs.existsSync('./ocr-images')) {
+            fs.mkdirSync('./ocr-images', { recursive: true });
+            console.log('Created ocr-images directory.');
+        }
+        console.log('Starting PDF to image conversion (ImageMagick)...');
+        const result = await converter(1); // convert first page only
+        const imagePath = result.path;
+        console.log('Image conversion complete. Image path:', imagePath);
+        if (!fs.existsSync(imagePath)) {
+            console.error('Image file was not created by pdf2pic:', imagePath);
+            throw new Error('Image file was not created by pdf2pic.');
+        }
+        console.log('Starting Tesseract OCR on image:', imagePath);
+        const { data: { text } } = await Tesseract.recognize(imagePath, 'eng');
+        console.log('Tesseract OCR complete.');
+        return text;
+    } catch (err) {
+        console.error("OCR failed:", err.message);
+        if (err.stack) console.error(err.stack);
+        // Add a more explicit error for PDF conversion failure
+        if (err.message && err.message.includes('EPIPE')) {
+            return Promise.reject(new Error('PDF to image conversion failed. Make sure both ImageMagick and Ghostscript are installed and in your PATH.'));
+        }
+        return Promise.reject(err);
+    }
+}
+
 function extractRelevantLines(text, maxLength = 2000) {
     const lines = text.split('\n').filter(line => /\d/.test(line));
     const joined = lines.join('\n');
@@ -119,12 +209,12 @@ function extractRelevantLines(text, maxLength = 2000) {
 }
 
 function extractPatientDetails(text) {
-    // Try to extract name, age, gender, date, accession no from the PDF text
-    const nameMatch = text.match(/Name\s*[:\-]?\s*([A-Za-z .]+)/i);
+    // Try to extract name, age, gender, date, accession no from the PDF text (more robust)
+    const nameMatch = text.match(/Name\s*[:\-]?\s*([A-Za-z .]+)/i) || text.match(/Patient\s*Name\s*[:\-]?\s*([A-Za-z .]+)/i);
     const ageMatch = text.match(/Age\s*[:\-]?\s*(\d{1,3})/i);
     const genderMatch = text.match(/Gender\s*[:\-]?\s*([A-Za-z]+)/i);
-    const dateMatch = text.match(/Date\s*[:\-]?\s*([\d\/-]{6,})/i);
-    const accessionMatch = text.match(/Accession\s*No\.?\s*[:\-]?\s*([A-Za-z0-9\/-]+)/i);
+    const dateMatch = text.match(/Date\s*[:\-]?\s*([\d\/-]{6,})/i) || text.match(/Report\s*Date\s*[:\-]?\s*([\d\/-]{6,})/i);
+    const accessionMatch = text.match(/Accession\s*No\.?\s*[:\-]?\s*([A-Za-z0-9\/-]+)/i) || text.match(/Accession\s*Number\s*[:\-]?\s*([A-Za-z0-9\/-]+)/i);
     return {
         name: nameMatch ? nameMatch[1].trim() : 'Unknown',
         age: ageMatch ? ageMatch[1].trim() : 'N/A',
@@ -141,23 +231,45 @@ router.get('/upload', isAuthenticated, (req, res) => {
 router.post('/upload', isAuthenticated, upload.fields([
     { name: 'user_pdf', maxCount: 1 },
 ]), async (req, res) => {
-    if (!req.files['user_pdf']) {
-        return res.render('upload', { error: 'Please upload PDF.', title: 'Upload Blood Report' });
+    // Declare variables for file and text extraction
+    let rawUserText = '';
+    let userPdfBuffer = null;
+    let userPdfPath = '';
+    let patientDetails = {};
+
+    // Get uploaded file
+    if (req.files && req.files['user_pdf'] && req.files['user_pdf'][0]) {
+        userPdfPath = req.files['user_pdf'][0].path;
+        userPdfBuffer = fs.readFileSync(userPdfPath);
+    } else {
+        return res.render('upload', { error: 'No PDF file uploaded.', title: 'Upload Blood Report' });
     }
-    const userPdfPath = req.files['user_pdf'][0].path;
-    const userPdfBuffer = fs.readFileSync(userPdfPath);
-    let rawUserText;
-    try {
-        rawUserText = (await pdfParse(userPdfBuffer)).text;
-    } catch (e) {
-        return res.render('upload', { error: 'Failed to parse PDF.', title: 'Upload Blood Report' });
+
+    // Try extracting text from PDF
+    if (!rawUserText || !rawUserText.trim()) {
+        try {
+            rawUserText = await extractTextWithPdfjs(userPdfBuffer);
+            console.log('Extracted with pdfjs-dist.');
+        } catch (e1) {
+            console.warn('PDF.js failed, trying OCR...');
+            try {
+                rawUserText = await extractTextWithOCR(userPdfPath); // OCR uses file path
+                console.log('Extracted with OCR.');
+            } catch (e2) {
+                console.error('OCR also failed:', e2.message);
+                return res.render('upload', {
+                    error: 'Failed to extract text from PDF using all available methods.',
+                    title: 'Upload Blood Report'
+                });
+            }
+        }
     }
+
+    // Log the full raw PDF text for debugging
+    console.log("RAW PDF TEXT:\n", rawUserText);
     const userText = extractRelevantLines(rawUserText, 2000);
-    // Extract patient details from the PDF text
-    const patientDetails = extractPatientDetails(rawUserText);
-    console.log("Extracted Patient Details:", patientDetails);
-    // Log and check extracted text
-    console.log("Parsed Text:\n", userText);
+    // Extract patient details from the raw text
+    patientDetails = extractPatientDetails(rawUserText);
     // You should fill this referenceText with the proper normal ranges or your reference format
     const referenceText = `
 Hemoglobin: 13.8–17.2 g/dL (men), 12.1–15.1 g/dL (women)
@@ -176,10 +288,10 @@ Platelets: 150,000–450,000 /mcL
     }
     let gptJson;
     try {
-        // Pass patient details in the prompt for OpenAI
-        const gptResponse = await getOpenAIReportJSON(userText, referenceText, patientDetails);
-        console.log("GPT Raw Output:\n", gptResponse);
-
+        let gptResponse = await getOpenAIReportJSON(userText, referenceText, patientDetails);
+        // Clean numbers with commas before parsing
+        gptResponse = gptResponse.replace(/(\d{1,3}),(\d{3})/g, '$1$2');
+        console.log("GPT JSON Output:\n", gptResponse);
         // Extract JSON from GPT response
         const jsonMatch = gptResponse.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
@@ -193,16 +305,6 @@ Platelets: 150,000–450,000 /mcL
     } catch (e) {
         return res.render('upload', { error: 'OpenAI API/JSON error: ' + e.message, title: 'Upload Blood Report' });
     }
-    // Overwrite patient/report fields with extracted details if available
-    gptJson.patient = {
-        name: patientDetails.name || gptJson.patient?.name || 'Unknown',
-        age: patientDetails.age || gptJson.patient?.age || 'N/A',
-        gender: patientDetails.gender || gptJson.patient?.gender || 'N/A',
-    };
-    gptJson.report = {
-        date: patientDetails.date || gptJson.report?.date || 'N/A',
-        accessionNo: patientDetails.accessionNo || gptJson.report?.accessionNo || 'N/A',
-    };
     // Fallbacks for missing fields to match EJS template
     if (!gptJson.patient) gptJson.patient = { name: 'Unknown', age: 'N/A', gender: 'N/A' };
     if (!gptJson.report) gptJson.report = { date: 'N/A', accessionNo: 'N/A' };
