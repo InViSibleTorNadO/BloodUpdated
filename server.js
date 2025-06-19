@@ -12,6 +12,7 @@ const app = express();
 // Set ejs-mate as the rendering engine for EJS
 app.engine('ejs', engine);
 
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
