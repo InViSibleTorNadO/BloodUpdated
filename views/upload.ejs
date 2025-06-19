@@ -1,0 +1,24 @@
+<% layout('boilerplate/boilerplate') %>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px; border-radius: 1rem;">
+            <h2 class="text-center mb-4">Upload Blood Report</h2>
+            <% if (error) { %>
+                <div class="alert alert-danger text-center" role="alert">
+                    <%= error %>
+                </div>
+                <% } %>
+                    <form method="POST" enctype="multipart/form-data" action="/upload">
+                        <div class="mb-3">
+                            <label for="user_pdf" class="form-label">Your Blood Report (PDF)</label>
+                            <input type="file" class="form-control" id="user_pdf" name="user_pdf"
+                                accept="application/pdf" required>
+                        </div>
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary">Upload Report</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="/logout" class="btn btn-outline-danger">Logout</a>
+                    </div>
+        </div>
+    </div>

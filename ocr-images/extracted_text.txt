@@ -1,0 +1,193 @@
+
+--- Page 1 ---
+la Report Status: Final
+@) UGH SINGH, PREETPAL
+
+Patient Information Specimen Information Client Information
+
+SINGH, PREETPAL Specimen: AZ345121K
+Requisition: 0027096
+
+DOB: 02/19/1979 AGE: 45 Lab Ref # DL23.1885498
+
+Gender: M Fasting: Y
+
+Phone: 470.295.5559
+
+Patient ID: 053165647SINGH
+
+Client #; 97556945 QATLO00
+BOOKS, NORVAL L
+DIRECT LABS-KH
+
+Collected: 12/10/2024 / 11:46 CST 112 INNWOOD DR STEB
+
+Received: 12/11/2024 / 00:34 CST COVINGTON, LA 70433-9134
+Reported: 12/11/2024 / 16:43 CST
+
+COMMENTS: FASTING: YES
+
+Test Name In Range Out Of Range Reference Range Lab ALBUMIN, RANDOM URINE W/CREATININE
+CREATININE, RANDOM URINE 18 L 20-320 mg/dL AT ALBUMIN, RANDOM URINE AT W/CREATININE
+ALBUMIN, URINE 0.3 mg/dL
+Reference Range
+
+Not established
+ALBUMIN/CREATININE
+
+RATIO,
+RANDOM URINE 17 <30 mg/g creat
+
+The ADA defines abnormalities in albumin
+excretion as follows:
+
+Albuminuria Category Result (mg/g creatinine)
+
+Normal to Mildly increased <30
+Moderately increased 30-299
+Severely increased > OR = 300
+
+The ADA recommends that at least two of three
+specimens collected within a 3-6 month period be
+abnormal before considering a patient to be
+within a diagnostic category.
+LIPID PANEL, STANDARD
+CHOLESTEROL, TOTAL 220 H <200 mg/dL AT HDL CHOLESTEROL 45 > OR = 40 mg/dL AT TRIGLYCERIDES
+142 <150 mg/dL AT LDL-CHOLESTEROL 148 H mg/dL (calc) AT Reference range: <100
+
+Desirable range <100 mg/dL for primary prevention;
+<70 mg/dL for patients with CHD or diabetic patients
+with > or = 2 CHD risk factors.
+
+LDL-C is now calculated using the Martin-Hopkins
+calculation, which is a validated novel method providing
+better accuracy than the Friedewald equation in the
+estimation of LDL-C.
+Martin SS et al. JAMA. 2013;310(19): 2061-2068
+(http: //education.QuestDiagnostics.com/fagq/FAQ164)
+CHOL/HDLC RATIO 4.9 <5.0 (calc) AT NON HDL CHOLESTEROL 175 H <130 mg/dL (calc) AT For
+patients with diabetes plus 1 major ASCVD risk
+factor, treating to a non-HDL-C goal of <100 mg/dL
+(LDL-C of <70 mg/dL) is considered a therapeutic
+option.
+COMPREHENSIVE METABOLIC AT PANEL
+GLUCOSE 85 65-99 mg/dL Fasting reference interval
+
+PAGE | OF 3
+
+CLIENT SERVICES: 866.697.8378 SPECIMEN: AZ345121K
+
+--- Page 2 ---
+Quest, Quest Diagnostics, the associated logo and all associated Quest Diagnostics marks are the trademarks of Quest Diagnostics.
+
+la Report Status: Final
+@) Que a SINGH, PREETPAL
+
+Patient Information Specimen Information Client Information
+
+SINGH, PREETPAL Specimen: AZ345121K Client #: 97556945
+Collected: 12/10/2024 / 11:46 CST BOOKS, NORVAL L
+DOB: 02/19/1979 AGE: 45 Received: 12/11/2024 / 00:34 CST
+
+Gender: M Fasting: Y Reported: 12/11/2024 / 16:43 CST
+Patient ID: 053165647SINGH
+
+Test Name In Range Out Of Range Reference Range Lab UREA NITROGEN (BUN) 12 7-25 mg/dL
+CREATININE 0.82 0.60-1.29 mg/dL EGFR 110 > OR = 60 mL/min/1.73m2 BUN/CREATININE RATIO SEE
+NOTE: 6-22 (calc) Not Reported: BUN and Creatinine are within
+
+reference range.
+
+SODIUM 139 135-146 mmol/L POTASSIUM 4.4 3.5-5.3 mmol/L CHLORIDE 104 98-110
+mmol/l CARBON DIOXIDE 25 20-32 mmol/L CALCIUM 8.9 8.6-10.3 mg/dL PROTEIN, TOTAL
+7.2 6.1-8.1 g/dL ALBUMIN 4.5 3.6-5.1 g/dL GLOBULIN 2.7 1.9-3.7 g/dL (calc)
+ALBUMIN/GLOBULIN RATIO 1.7 1.0-2.5 (calc) BILIRUBIN, TOTAL 0.5 0.2-1.2 mg/dL
+ALKALINE PHOSPHATASE 70 36-130 U/L AST 19 10-40 U/L
+ALT 19 9-46 U/L
+HEMOGLOBIN Alc WITH eAG AT HEMOGLOBIN Alc 5.9 H <5.7 % of total Hgb For someone without known
+diabetes, a hemoglobin
+
+Alc value between 5.7% and 6.4% is consistent with
+
+prediabetes and should be confirmed with a
+
+follow-up test.
+
+For someone with known diabetes, a value <7%
+indicates that their diabetes is well controlled. Alc
+targets should be individualized based on duration of
+diabetes, age, comorbid conditions, and other
+considerations.
+
+This assay result is consistent with an increased risk
+of diabetes.
+
+Currently, no consensus exists regarding use of
+hemoglobin Alc for diagnosis of diabetes for children.
+
+eAG (mg/dL) 123 mg/dL
+eAG (mmol/L) 6.8 mmol/L
+URIC ACID 6.6 4.0-8.0 mg/dL AT Therapeutic target for gout patients: <6.0 mg/dL
+
+TSH 1.51 0.40-4.50 mIU/L AT CBC (INCLUDES DIFF/PLT) AT WHITE BLOOD CELL COUNT 9.6 3.8-10.8
+Thousand/uL RED BLOOD CELL COUNT 4.66 4.20-5.80 Million/uL HEMOGLOBIN 13.8 13.2-17.1 g/dL
+HEMATOCRIT 41.6 38.5-50.0 % MCV 89.3 80.0-100.0 fL MCH 29.6 27.0-33.0 pg MCHC 33.2 32.0-36.0
+g/dL For adults, a slight decrease in the calculated MCHC
+value (in the range of 30 to 32 g/dL) is most likely
+not clinically significant; however, it should be
+PAGE 2 OF 3
+
+CLIENT SERVICES: 866.697.8378 SPECIMEN: AZ345121K
+
+Quest, Quest Diagnostics, the associated logo and all associated Quest Diagnostics marks are the trademarks of Quest Diagnostics.
+
+la Report Status: Final
+@) Que a SINGH, PREETPAL
+
+Patient Information Specimen Information Client Information
+
+--- Page 3 ---
+SINGH, PREETPAL Specimen: AZ345121K Client #: 97556945
+Collected: 12/10/2024 / 11:46 CST BOOKS, NORVAL L
+DOB: 02/19/1979 AGE: 45 Received: 12/11/2024 / 00:34 CST
+
+Gender: M Fasting: Y Reported: 12/11/2024 / 16:43 CST
+Patient ID: 053165647SINGH
+
+Test Name In Range Out Of Range Reference Range Lab interpreted with caution in correlation
+with other
+red cell parameters and the patient's clinical
+condition.
+RDW 12.7 11.0-15.0 % PLATELET COUNT 327 140-400 Thousand/uL MPV 9.8 7.5-12.5 £L
+ABSOLUTE NEUTROPHILS 5222 1500-7800 cells/uL ABSOLUTE LYMPHOCYTES 3571 850-3900
+cells/uL ABSOLUTE MONOCYTES 701 200-950 cells/uL ABSOLUTE EOSINOPHILS 67 15-500
+cells/uL ABSOLUTE BASOPHILS 38 0-200 cells/uL NEUTROPHILS 54.4 %
+LYMPHOCYTES 37.2 %
+MONOCYTES 7.3 %
+EOSINOPHILS 0.7 %
+BASOPHILS 0.4 %
+URINALYSIS, COMPLETE AT COLOR YELLOW YELLOW
+APPEARANCE CLEAR CLEAR
+SPECIFIC GRAVITY 1.003 1.001-1.035 PH 6.5 5.0-8.0
+GLUCOSE NEGATIVE NEGATIVE
+BILIRUBIN NEGATIVE NEGATIVE
+KETONES NEGATIVE NEGATIVE
+OCCULT BLOOD NEGATIVE NEGATIVE
+PROTEIN NEGATIVE NEGATIVE
+NITRITE NEGATIVE NEGATIVE
+LEUKOCYTE ESTERASE NEGATIVE NEGATIVE
+WBC NONE SEEN < OR = 5 /HPF RBC NONE SEEN < OR = 2 /HPF SQUAMOUS
+EPITHELIAL CELLS NONE SEEN < OR = 5 /HPF BACTERIA NONE SEEN NONE SEEN /HPF
+HYALINE CAST NONE SEEN NONE SEEN /LPF This urine was analyzed for the
+presence of WBC,
+RBC, bacteria, casts, and other formed elements.
+Only those elements seen were reported.
+
+PERFORMING SITE:
+
+AT QUEST DIAGNOSTICS-ATLANTA, 1777 MONTREAL CIRCLE, TUCKER, GA 30084-6802 Laboratory Director: ANDREW N YOUNG,MD,PHD, CLIA: 11D0255931
+PAGE 3 OF 3
+
+CLIENT SERVICES: 866.697.8378 SPECIMEN: AZ345121K
+
+Quest, Quest Diagnostics, the associated logo and all associated Quest Diagnostics marks are the trademarks of Quest Diagnostics.

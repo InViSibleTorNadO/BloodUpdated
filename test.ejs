@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Medical Test Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #1976d2;
+      --danger: #e53935;
+      --warning: #fbc02d;
+      --success: #43a047;
+      --border: #e0e0e0;
+      --bg: #f9f9f9;
+      --text: #222;
+      --muted: #757575;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .container {
+      width: 210mm;
+      min-height: 297mm;
+      max-width: 210mm;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 24mm 18mm;
+      box-sizing: border-box;
+      page-break-inside: avoid;
+    }
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+    .header .info {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .header .title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .test-section {
+      margin-bottom: 24px;
+    }
+    .test-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .test-meta {
+      font-size: 1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .result-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .bar {
+      flex: 1;
+      height: 18px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, var(--success) 0%, var(--success) 45%, var(--danger) 45%, var(--danger) 100%);
+      position: relative;
+      margin-right: 12px;
+      overflow: hidden;
+    }
+    .indicator {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      background: var(--primary);
+      left: calc(var(--indicator-pos, 50%) - 1px);
+    }
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 2px;
+      color: var(--muted);
+    }
+    .result-value {
+      font-weight: bold;
+      color: var(--danger);
+      font-size: 1.1em;
+      min-width: 60px;
+      text-align: right;
+    }
+    .section-title {
+      font-weight: 600;
+      margin: 18px 0 8px 0;
+      font-size: 1.1em;
+      color: var(--primary);
+    }
+    .reasons, .indications {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .reason, .indication {
+      flex: 1 1 220px;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.98em;
+      min-width: 180px;
+      margin-bottom: 8px;
+    }
+    .reason-icon, .indication-icon {
+      font-size: 1.5em;
+      margin-bottom: 4px;
+      color: var(--primary);
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .reasons, .indications {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+    @media print {
+      body, html {
+        background: #fff !important;
+      }
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+        width: 210mm;
+        min-height: 297mm;
+        max-width: 210mm;
+        padding: 24mm 18mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title">Test Report</div>
+        <div class="info">
+          Name: <span id="patient-name"><%= patient.name %></span> |
+          Age: <span id="patient-age"><%= patient.age %></span> |
+          Gender: <span id="patient-gender"><%= patient.gender %></span>
+        </div>
+      </div>
+      <div class="info">
+        Date: <span id="test-date"><%= report.date %></span><br>
+        Accession No: <span id="accession-no"><%= report.accessionNo %></span>
+      </div>
+    </div>
+
+    <% tests.forEach(function(test) { %>
+    <div class="test-section">
+      <div class="test-title" id="test-name"><%= test.name %></div>
+      <div class="test-meta" id="test-description">
+        <%= test.description %>
+      </div>
+      <div class="result-bar">
+        <div class="bar" style="--indicator-pos: <%= test.indicatorPosition %>%;">
+          <div class="indicator"></div>
+        </div>
+        <div class="result-value" id="test-value"><%= test.value %> <%= test.unit %></div>
+      </div>
+      <div class="bar-labels">
+        <% Object.keys(test.referenceRange).forEach(function(key) { %>
+          <span><%= key.charAt(0).toUpperCase() + key.slice(1) %> (<%= test.referenceRange[key] %>)</span>
+        <% }) %>
+      </div>
+
+      <div>
+        <div class="section-title">Common reasons for abnormal results:</div>
+        <div class="reasons">
+          <% (test.reasons || []).forEach(function(reason, idx) { %>
+            <div class="reason">
+              <div class="reason-icon"><%= test.reasonIcons && test.reasonIcons[idx] ? test.reasonIcons[idx] : '' %></div>
+              <%= reason %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Abnormal results may indicate:</div>
+        <div class="indications">
+          <% (test.indications || []).forEach(function(indication, idx) { %>
+            <div class="indication">
+              <div class="indication-icon"><%= test.indicationIcons && test.indicationIcons[idx] ? test.indicationIcons[idx] : '' %></div>
+              <%= indication %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</body>
+</html> 
