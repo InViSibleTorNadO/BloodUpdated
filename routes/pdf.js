@@ -49,6 +49,11 @@ async function getOpenAIReportJSON(text, referenceText, patientDetails) {
     const prompt = `
 You are a medical data extraction AI. Your job is to extract all possible blood test results from the following patient report text, match them to the reference ranges, and fill in as much detail as possible in the output JSON. If any field is missing in the report, use "Unknown" or "N/A". If a value is present but the unit or reference is missing, make a best guess based on the reference section. Do not skip any test you can find, even if the value or unit is unclear.
 
+For each test, also provide:
+- a brief explanation (1-2 lines) of what the test measures and what abnormal results may indicate, in simple terms for a patient.
+- for each reason in the 'reasons' array, add a 'reasonDetails' array (same length) with a 1-2 line simple explanation for each reason, so even a 5th class student can understand.
+- for each indication in the 'indications' array, add an 'indicationDetails' array (same length) with a 1-2 line simple explanation for each indication.
+
 Return ONLY valid JSON in the following format (no explanation, no extra text):
 {
   patient: { name: string, age: string, gender: string },
@@ -57,13 +62,20 @@ Return ONLY valid JSON in the following format (no explanation, no extra text):
     {
       name: string, // test name (e.g. Hemoglobin)
       description: string, // what is tested and what it means (4 lines)
+      explanation: string, // 1-2 line summary of what the test means and what abnormal results may indicate
       value: string, // patient's value
       unit: string, // unit (e.g. g/dL)
       indicatorPosition: number, // 0-100, where value falls in reference range (0=low, 100=high, 50=mid)
-      referenceRange: { low: number, high: number, genderSpecific?: boolean },
+      referenceRange: {
+        low: number, // lower limit (start of yellow)
+        normal: { low: number, high: number }, // normal range (start/end of green)
+        high: number // upper limit (start of red)
+      },
       reasons: [string], // common reasons for abnormal results
+      reasonDetails: [string], // 1-2 line simple explanation for each reason
       reasonIcons: [string], // emoji/icon for each reason
       indications: [string], // what these results may indicate
+      indicationDetails: [string], // 1-2 line simple explanation for each indication
       indicationIcons: [string] // emoji/icon for each indication
     }
   ]
@@ -86,14 +98,14 @@ IMPORTANT:
 - Fill in as many fields as possible, even if you have to make a best guess.
 - If a value is missing, use "N/A". If a unit is missing, use "N/A". If a reference is missing, use the closest match from the reference section.
 - Do NOT include any explanation or extra text, only the JSON object.
-- Use all 4096 tokens and provide as much detail as possible.
+- Use all tokens and provide as much detail as possible.
 `;
 
     const response = await openai.chat.completions.create({
-        model: 'gpt-4', // Use GPT-4 for better extraction
+        model: 'gpt-4.1',
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: 4096,
-        temperature: 0.3 // lower temperature for more deterministic output
+        max_tokens: 10000,
+        temperature: 0.3
     });
 
     return response.choices[0].message.content;
@@ -119,7 +131,7 @@ async function extractTextWithPdfjs(buffer) {
         return text;
     } catch (err) {
         console.error('extractTextWithPdfjs error:', err.message);
-        throw err; // Let the outer function handle this
+        throw err;
     }
 }
 const { fromPath } = require("pdf2pic");
@@ -220,32 +232,43 @@ router.post('/upload', isAuthenticated, upload.fields([
         }
     }
 
-    // Log the full raw PDF text for debugging
     console.log("RAW PDF TEXT:\n", rawUserText);
     const userText = extractRelevantLines(rawUserText, 2000);
-    // Extract patient details from the raw text
     patientDetails = extractPatientDetails(rawUserText);
-    // You should fill this referenceText with the proper normal ranges or your reference format
     const referenceText = `
-Hemoglobin: 13.8–17.2 g/dL (men), 12.1–15.1 g/dL (women)
-RBC: 4.7–6.1 million/mcL (men), 4.2–5.4 million/mcL (women)
-WBC: 4,500–11,000 cells/mcL
-ALT (SGPT): 7–56 U/L → Liver Function
-AST (SGOT): 10–40 U/L → Liver/Muscle
-Creatinine: 0.74–1.35 mg/dL (men), 0.59–1.04 mg/dL (women)
-TSH: 0.4–4.0 mIU/L → Thyroid
-Calcium: 8.6–10.2 mg/dL
-Platelets: 150,000–450,000 /mcL
+Hemoglobin: low <13.8 g/dL (men), <12.1 g/dL (women); normal 13.8–17.2 g/dL (men), 12.1–15.1 g/dL (women); high >17.2 g/dL (men), >15.1 g/dL (women)
+RBC: low <4.7 million/mcL (men), <4.2 million/mcL (women); normal 4.7–6.1 million/mcL (men), 4.2–5.4 million/mcL (women); high >6.1 million/mcL (men), >5.4 million/mcL (women)
+WBC: low <4,500 cells/mcL; normal 4,500–11,000 cells/mcL; high >11,000 cells/mcL
+ALT (SGPT): low <7 U/L; normal 7–56 U/L; high >56 U/L
+AST (SGOT): low <10 U/L; normal 10–40 U/L; high >40 U/L
+Creatinine: low <0.74 mg/dL (men), <0.59 mg/dL (women); normal 0.74–1.35 mg/dL (men), 0.59–1.04 mg/dL (women); high >1.35 mg/dL (men), >1.04 mg/dL (women)
+TSH: low <0.4 mIU/L; normal 0.4–4.0 mIU/L; high >4.0 mIU/L
+Calcium: low <8.6 mg/dL; normal 8.6–10.2 mg/dL; high >10.2 mg/dL
+Platelets: low <150,000 /mcL; normal 150,000–450,000 /mcL; high >450,000 /mcL
 `;
     console.log("Reference Text:\n", referenceText);
     if (!referenceText || !referenceText.trim()) {
         return res.render('upload', { error: 'Reference text is empty.', title: 'Upload Blood Report' });
     }
     let gptJson;
+    // const cachePath = path.join(__dirname, '../gpt_response_cache.json');
     try {
-        let gptResponse = await getOpenAIReportJSON(userText, referenceText, patientDetails);
-        // Clean numbers with commas before parsing
-        gptResponse = gptResponse.replace(/(\d{1,3}),(\d{3})/g, '$1$2');
+        let gptResponse;
+        // Check if cache exists
+        /*
+        if (fs.existsSync(cachePath)) {
+            console.log('Using cached GPT response.');
+            gptResponse = fs.readFileSync(cachePath, 'utf-8');
+        } else {
+        */
+            gptResponse = await getOpenAIReportJSON(userText, referenceText, patientDetails);
+            // Clean numbers with commas before parsing
+            gptResponse = gptResponse.replace(/(\d{1,3}),(\d{3})/g, '$1$2');
+        /*
+            fs.writeFileSync(cachePath, gptResponse, 'utf-8');
+            console.log('GPT response cached.');
+        }
+        */
         console.log("GPT JSON Output:\n", gptResponse);
         // Extract JSON from GPT response
         const jsonMatch = gptResponse.match(/\{[\s\S]*\}/);
@@ -264,18 +287,34 @@ Platelets: 150,000–450,000 /mcL
     if (!gptJson.patient) gptJson.patient = { name: 'Unknown', age: 'N/A', gender: 'N/A' };
     if (!gptJson.report) gptJson.report = { date: 'N/A', accessionNo: 'N/A' };
     if (!Array.isArray(gptJson.tests)) gptJson.tests = [];
-    gptJson.tests = gptJson.tests.map(test => ({
-        name: test.name || 'Unknown',
-        description: test.description || 'N/A',
-        value: test.value || 'N/A',
-        unit: test.unit || '',
-        indicatorPosition: typeof test.indicatorPosition === 'number' ? test.indicatorPosition : 50,
-        referenceRange: test.referenceRange || { low: 0, high: 0 },
-        reasons: Array.isArray(test.reasons) ? test.reasons : [],
-        reasonIcons: Array.isArray(test.reasonIcons) ? test.reasonIcons : [],
-        indications: Array.isArray(test.indications) ? test.indications : [],
-        indicationIcons: Array.isArray(test.indicationIcons) ? test.indicationIcons : []
-    }));
+    // Map each test to set indicatorPosition for static bar (low=0, high=100, normal=20-80)
+    gptJson.tests = gptJson.tests.map(test => {
+        // Parse patient value as number
+        let value = parseFloat(test.value);
+        let low = test.referenceRange && typeof test.referenceRange.low === 'number' ? test.referenceRange.low : 0;
+        let normalLow = test.referenceRange && test.referenceRange.normal && typeof test.referenceRange.normal.low === 'number' ? test.referenceRange.normal.low : 0;
+        let normalHigh = test.referenceRange && test.referenceRange.normal && typeof test.referenceRange.normal.high === 'number' ? test.referenceRange.normal.high : 0;
+        let high = test.referenceRange && typeof test.referenceRange.high === 'number' ? test.referenceRange.high : 0;
+        // For static bar: low=0-20%, normal=20-80%, high=80-100%
+        let indicatorPosition = 50; // default
+        if (!isNaN(value) && low < high) {
+            if (value < normalLow) {
+                // Low section: map [low, normalLow) to [0, 20]
+                indicatorPosition = 0 + ((value - low) / (normalLow - low)) * 20;
+            } else if (value <= normalHigh) {
+                // Normal section: map [normalLow, normalHigh] to [20, 80]
+                indicatorPosition = 20 + ((value - normalLow) / (normalHigh - normalLow)) * 60;
+            } else {
+                // High section: map (normalHigh, high] to [80, 100]
+                indicatorPosition = 80 + ((value - normalHigh) / (high - normalHigh)) * 20;
+            }
+            indicatorPosition = Math.max(0, Math.min(100, Math.round(indicatorPosition)));
+        }
+        return {
+            ...test,
+            indicatorPosition
+        };
+    });
     // Render EJS template to HTML
     let htmlContent;
     try {

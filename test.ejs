@@ -95,18 +95,34 @@
       flex: 1;
       height: 18px;
       border-radius: 8px;
-      background: linear-gradient(90deg, var(--success) 0%, var(--success) 45%, var(--danger) 45%, var(--danger) 100%);
+      background: linear-gradient(
+        90deg,
+        var(--warning) 0%,
+        var(--warning) 20%,
+        var(--success) 20%,
+        var(--success) 80%,
+        var(--danger) 80%,
+        var(--danger) 100%
+      );
       position: relative;
       margin-right: 12px;
       overflow: hidden;
     }
     .indicator {
       position: absolute;
-      top: 0;
-      height: 100%;
-      width: 2px;
-      background: var(--primary);
-      left: calc(var(--indicator-pos, 50%) - 1px);
+      top: -4px;
+      height: 26px;
+      width: 0;
+      left: calc(var(--indicator-pos, 50%) - 6px);
+      z-index: 2;
+    }
+    .indicator-arrow {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 12px solid var(--primary);
+      margin: 0 auto;
     }
     .bar-labels {
       display: flex;
@@ -208,16 +224,23 @@
       <div class="test-meta" id="test-description">
         <%= test.description %>
       </div>
+      <% if (test.explanation) { %>
+      <div class="test-explanation" style="font-size:0.98em;color:#1976d2;margin-bottom:8px;">
+        <%= test.explanation %>
+      </div>
+      <% } %>
       <div class="result-bar">
         <div class="bar" style="--indicator-pos: <%= test.indicatorPosition %>%;">
-          <div class="indicator"></div>
+          <div class="indicator" style="left: calc(<%= test.indicatorPosition %>% - 6px);">
+            <div class="indicator-arrow"></div>
+          </div>
         </div>
         <div class="result-value" id="test-value"><%= test.value %> <%= test.unit %></div>
       </div>
       <div class="bar-labels">
-        <% Object.keys(test.referenceRange).forEach(function(key) { %>
-          <span><%= key.charAt(0).toUpperCase() + key.slice(1) %> (<%= test.referenceRange[key] %>)</span>
-        <% }) %>
+        <span class="low">Low (<%= test.referenceRange.low %>)</span>
+        <span class="normal">Normal (<%= test.referenceRange.normal.low %> - <%= test.referenceRange.normal.high %>)</span>
+        <span class="high">High (&gt; <%= test.referenceRange.high %>)</span>
       </div>
 
       <div>
