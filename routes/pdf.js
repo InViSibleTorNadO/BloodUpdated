@@ -56,7 +56,7 @@ Return ONLY valid JSON in the following format (no explanation, no extra text):
   tests: [
     {
       name: string, // test name (e.g. Hemoglobin)
-      description: string, // what is tested and what it means (1-2 lines)
+      description: string, // what is tested and what it means (4 lines)
       value: string, // patient's value
       unit: string, // unit (e.g. g/dL)
       indicatorPosition: number, // 0-100, where value falls in reference range (0=low, 100=high, 50=mid)
@@ -86,6 +86,7 @@ IMPORTANT:
 - Fill in as many fields as possible, even if you have to make a best guess.
 - If a value is missing, use "N/A". If a unit is missing, use "N/A". If a reference is missing, use the closest match from the reference section.
 - Do NOT include any explanation or extra text, only the JSON object.
+- Use all 4096 tokens and provide as much detail as possible.
 `;
 
     const response = await openai.chat.completions.create({
