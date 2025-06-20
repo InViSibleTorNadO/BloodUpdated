@@ -15,6 +15,9 @@
       --text: #222;
       --muted: #757575;
     }
+    @page {
+      margin: 24mm 18mm;
+    }
     html, body {
       height: 100%;
       margin: 0;
@@ -24,24 +27,33 @@
     }
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      min-height: 100vh;
+      /* min-height: 100vh; */
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
+      /* User's customizations: */
+      /* Remove default padding and margin, use .inner for main content padding */
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
     }
     .container {
       width: 210mm;
-      min-height: 297mm;
+      /* min-height: 297mm; */
       max-width: 210mm;
-      margin: 0 auto;
+      margin: 0 auto 24mm auto;
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      padding: 24mm 18mm;
+      padding: 0;
       box-sizing: border-box;
       page-break-inside: avoid;
+    }
+    .inner{
+      padding: 24mm 18mm;
     }
     .header {
       display: flex;
@@ -156,17 +168,25 @@
       .container {
         box-shadow: none;
         border-radius: 0;
-        margin: 0;
+        margin: 0 0 0 0;
         width: 210mm;
         min-height: 297mm;
         max-width: 210mm;
-        padding: 24mm 18mm;
+        /* padding: 24mm 18mm; */
+      }
+      .container + .container{
+        page-break-before: always;
+      }
+      /* Fix: Remove top padding from .inner on first page only */
+      .container:first-child .inner {
+        padding-top: 0 !important;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="inner">
     <div class="header">
       <div>
         <div class="title">Test Report</div>
@@ -227,4 +247,4 @@
     <% }) %>
   </div>
 </body>
-</html> 
+</html>
