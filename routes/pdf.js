@@ -43,68 +43,34 @@ async function htmlToPdf(htmlContent, outputPath) {
 }
 
 
-// Call OpenAI with updated prompt requesting strict JSON output for EJS
+// Call OpenAI with improved prompt for strict and complete JSON output for EJS
 async function getOpenAIReportJSON(text, referenceText, patientDetails) {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const prompt = `
-You are an expert medical assistant AI.
+You are a medical data extraction AI. Your job is to extract all possible blood test results from the following patient report text, match them to the reference ranges, and fill in as much detail as possible in the output JSON. If any field is missing in the report, use "Unknown" or "N/A". If a value is present but the unit or reference is missing, make a best guess based on the reference section. Do not skip any test you can find, even if the value or unit is unclear.
 
-You are given two things:
-1. A reference format of normal blood test ranges
-2. A patient's extracted blood test report
-
-Your task:
-- Go through the patient report.
-- For each test found:
-  - Match it with the reference.
-  - Check if it is below or above the normal range.
-  - If abnormal or normal, include it in the result JSON.
-
-IMPORTANT:
-- Respond ONLY with valid JSON. No explanation or extra text.
-- Use the exact structure below.
-- Fill in dummy values like "Unknown" or "N/A" if data is missing.
-- For each test, provide:
-  - name: The test name (e.g. Hemoglobin)
-  - description: What is tested and what it means (1-2 lines)
-  - value: The patient's value
-  - unit: The unit (e.g. g/dL)
-  - indicatorPosition: A number from 0-100 showing where the value falls in the reference range (0=low, 100=high, 50=mid)
-  - referenceRange: { low, high, genderSpecific? }
-  - reasons: Common reasons for abnormal results (array)
-  - reasonIcons: Emoji or icon for each reason (array)
-  - indications: What these results may indicate (array)
-  - indicationIcons: Emoji or icon for each indication (array)
-
-Return JSON:
+Return ONLY valid JSON in the following format (no explanation, no extra text):
 {
-  patient: { name: "Unknown", age: "N/A", gender: "N/A" },
-  report: { date: "N/A", accessionNo: "N/A" },
+  patient: { name: string, age: string, gender: string },
+  report: { date: string, accessionNo: string },
   tests: [
     {
-      name: string,
-      description: string,
-      value: string,
-      unit: string,
-      indicatorPosition: number,  // 0 to 100
-      referenceRange: {
-        low: number,
-        high: number,
-        genderSpecific?: boolean
-      },
-      reasons: [string],
-      reasonIcons: [string],
-      indications: [string],
-      indicationIcons: [string]
+      name: string, // test name (e.g. Hemoglobin)
+      description: string, // what is tested and what it means (1-2 lines)
+      value: string, // patient's value
+      unit: string, // unit (e.g. g/dL)
+      indicatorPosition: number, // 0-100, where value falls in reference range (0=low, 100=high, 50=mid)
+      referenceRange: { low: number, high: number, genderSpecific?: boolean },
+      reasons: [string], // common reasons for abnormal results
+      reasonIcons: [string], // emoji/icon for each reason
+      indications: [string], // what these results may indicate
+      indicationIcons: [string] // emoji/icon for each indication
     }
   ]
 }
 
-Reference Format:
+Reference Ranges:
 ${referenceText}
-
-User Report:
-${text}
 
 Patient Details:
 Name: ${patientDetails.name}
@@ -112,13 +78,21 @@ Age: ${patientDetails.age}
 Gender: ${patientDetails.gender}
 Date: ${patientDetails.date}
 Accession No: ${patientDetails.accessionNo}
+
+Patient Report Text:
+${text}
+
+IMPORTANT:
+- Fill in as many fields as possible, even if you have to make a best guess.
+- If a value is missing, use "N/A". If a unit is missing, use "N/A". If a reference is missing, use the closest match from the reference section.
+- Do NOT include any explanation or extra text, only the JSON object.
 `;
 
     const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4', // Use GPT-4 for better extraction
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 4096,
-        temperature: 0.7
+        temperature: 0.3 // lower temperature for more deterministic output
     });
 
     return response.choices[0].message.content;
