@@ -1,0 +1,493 @@
+{
+  "patient": {
+    "name": "SINGH, PREETPAL",
+    "age": "45",
+    "gender": "M"
+  },
+  "report": {
+    "date": "12/11/2024",
+    "accessionNo": "AZ345121K"
+  },
+  "tests": [
+    {
+      "name": "Creatinine",
+      "description": "Creatinine is a waste product from muscle metabolism, filtered by the kidneys. It is used to assess kidney function and detect renal impairment. Elevated levels may indicate kidney dysfunction or dehydration. Low levels are less common and may be seen in reduced muscle mass.",
+      "value": "0.82",
+      "unit": "mg/dL",
+      "indicatorPosition": 20,
+      "referenceRange": {
+        "low": 0.74,
+        "normal": { "low": 0.74, "high": 1.35 },
+        "high": 1.35
+      },
+      "reasons": [
+        "Kidney dysfunction",
+        "Dehydration",
+        "High protein diet",
+        "Muscle breakdown"
+      ],
+      "reasonIcons": [
+        "🩺",
+        "💧",
+        "🍖",
+        "💪"
+      ],
+      "indications": [
+        "Normal kidney function",
+        "No evidence of acute kidney injury"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Urea Nitrogen (BUN)",
+      "description": "BUN measures the amount of nitrogen in the blood from urea, a waste product of protein metabolism. It helps evaluate kidney function and hydration status. High levels may suggest kidney disease or dehydration. Low levels can be seen in liver disease or malnutrition.",
+      "value": "12",
+      "unit": "mg/dL",
+      "indicatorPosition": 26,
+      "referenceRange": {
+        "low": 7,
+        "normal": { "low": 7, "high": 25 },
+        "high": 25
+      },
+      "reasons": [
+        "Kidney dysfunction",
+        "Dehydration",
+        "High protein intake",
+        "Heart failure"
+      ],
+      "reasonIcons": [
+        "🩺",
+        "💧",
+        "🍖",
+        "❤️"
+      ],
+      "indications": [
+        "Normal kidney function",
+        "Normal protein metabolism"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Glucose",
+      "description": "Glucose is the main sugar found in blood and the body's primary energy source. Blood glucose testing helps diagnose and monitor diabetes and hypoglycemia. High levels may indicate diabetes or stress. Low levels may cause symptoms like dizziness or confusion.",
+      "value": "85",
+      "unit": "mg/dL",
+      "indicatorPosition": 33,
+      "referenceRange": {
+        "low": 65,
+        "normal": { "low": 65, "high": 99 },
+        "high": 99
+      },
+      "reasons": [
+        "Diabetes",
+        "Stress",
+        "Medications",
+        "Endocrine disorders"
+      ],
+      "reasonIcons": [
+        "🩸",
+        "😰",
+        "💊",
+        "🧬"
+      ],
+      "indications": [
+        "Normal fasting glucose",
+        "No evidence of diabetes"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Cholesterol, Total",
+      "description": "Total cholesterol measures the overall amount of cholesterol in the blood. It is used to assess cardiovascular risk. High levels are associated with increased risk of heart disease. Low levels are rare but may be seen in malnutrition or liver disease.",
+      "value": "220",
+      "unit": "mg/dL",
+      "indicatorPosition": 100,
+      "referenceRange": {
+        "low": 0,
+        "normal": { "low": 0, "high": 200 },
+        "high": 200
+      },
+      "reasons": [
+        "High-fat diet",
+        "Genetic factors",
+        "Obesity",
+        "Lack of exercise"
+      ],
+      "reasonIcons": [
+        "🍔",
+        "🧬",
+        "⚖️",
+        "🏃‍♂️"
+      ],
+      "indications": [
+        "Increased cardiovascular risk",
+        "Possible need for lifestyle modification"
+      ],
+      "indicationIcons": [
+        "⚠️",
+        "❤️"
+      ]
+    },
+    {
+      "name": "HDL Cholesterol",
+      "description": "HDL (high-density lipoprotein) cholesterol is known as 'good' cholesterol. It helps remove excess cholesterol from the bloodstream. Higher levels are protective against heart disease. Low levels increase cardiovascular risk.",
+      "value": "45",
+      "unit": "mg/dL",
+      "indicatorPosition": 13,
+      "referenceRange": {
+        "low": 40,
+        "normal": { "low": 40, "high": 100 },
+        "high": 100
+      },
+      "reasons": [
+        "Genetics",
+        "Lack of exercise",
+        "Poor diet",
+        "Smoking"
+      ],
+      "reasonIcons": [
+        "🧬",
+        "🚶‍♂️",
+        "🍟",
+        "🚬"
+      ],
+      "indications": [
+        "Protective against heart disease",
+        "Within normal range"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Triglycerides",
+      "description": "Triglycerides are a type of fat found in the blood. Elevated levels increase the risk of heart disease and pancreatitis. They are influenced by diet, obesity, and metabolic disorders. Low levels are generally not concerning.",
+      "value": "142",
+      "unit": "mg/dL",
+      "indicatorPosition": 95,
+      "referenceRange": {
+        "low": 0,
+        "normal": { "low": 0, "high": 150 },
+        "high": 150
+      },
+      "reasons": [
+        "Obesity",
+        "High carbohydrate diet",
+        "Diabetes",
+        "Alcohol use"
+      ],
+      "reasonIcons": [
+        "⚖️",
+        "🍞",
+        "🩸",
+        "🍺"
+      ],
+      "indications": [
+        "Near upper normal limit",
+        "Monitor for cardiovascular risk"
+      ],
+      "indicationIcons": [
+        "⚠️",
+        "❤️"
+      ]
+    },
+    {
+      "name": "LDL Cholesterol",
+      "description": "LDL (low-density lipoprotein) cholesterol is known as 'bad' cholesterol. High levels are a major risk factor for atherosclerosis and heart disease. Lowering LDL is a key target in cardiovascular prevention. Levels are influenced by genetics and diet.",
+      "value": "148",
+      "unit": "mg/dL",
+      "indicatorPosition": 100,
+      "referenceRange": {
+        "low": 0,
+        "normal": { "low": 0, "high": 100 },
+        "high": 100
+      },
+      "reasons": [
+        "High-fat diet",
+        "Genetics",
+        "Obesity",
+        "Lack of exercise"
+      ],
+      "reasonIcons": [
+        "🍔",
+        "🧬",
+        "⚖️",
+        "🏃‍♂️"
+      ],
+      "indications": [
+        "High cardiovascular risk",
+        "Consider therapy or lifestyle changes"
+      ],
+      "indicationIcons": [
+        "⚠️",
+        "❤️"
+      ]
+    },
+    {
+      "name": "Non-HDL Cholesterol",
+      "description": "Non-HDL cholesterol includes all atherogenic cholesterol types (total cholesterol minus HDL). It is a strong predictor of cardiovascular risk. High levels are associated with increased risk of heart disease. Lowering non-HDL cholesterol is a therapeutic target.",
+      "value": "175",
+      "unit": "mg/dL",
+      "indicatorPosition": 100,
+      "referenceRange": {
+        "low": 0,
+        "normal": { "low": 0, "high": 130 },
+        "high": 130
+      },
+      "reasons": [
+        "High LDL or VLDL",
+        "Poor diet",
+        "Obesity",
+        "Genetics"
+      ],
+      "reasonIcons": [
+        "🩸",
+        "🍟",
+        "⚖️",
+        "🧬"
+      ],
+      "indications": [
+        "Elevated cardiovascular risk",
+        "Consider aggressive lipid management"
+      ],
+      "indicationIcons": [
+        "⚠️",
+        "❤️"
+      ]
+    },
+    {
+      "name": "Chol/HDLC Ratio",
+      "description": "The cholesterol/HDL ratio is used to assess cardiovascular risk. A lower ratio indicates lower risk. High ratios are associated with increased risk of heart disease. It is influenced by both total cholesterol and HDL levels.",
+      "value": "4.9",
+      "unit": "N/A",
+      "indicatorPosition": 98,
+      "referenceRange": {
+        "low": 0,
+        "normal": { "low": 0, "high": 5.0 },
+        "high": 5.0
+      },
+      "reasons": [
+        "High total cholesterol",
+        "Low HDL",
+        "Poor diet",
+        "Obesity"
+      ],
+      "reasonIcons": [
+        "🩸",
+        "⬇️",
+        "🍟",
+        "⚖️"
+      ],
+      "indications": [
+        "Borderline cardiovascular risk",
+        "Monitor lipid profile"
+      ],
+      "indicationIcons": [
+        "⚠️",
+        "❤️"
+      ]
+    },
+    {
+      "name": "Sodium",
+      "description": "Sodium is an essential electrolyte that helps regulate fluid balance, nerve function, and muscle contraction. Abnormal levels can indicate dehydration, kidney disease, or hormonal imbalances. Both high and low sodium can be dangerous.",
+      "value": "139",
+      "unit": "mmol/L",
+      "indicatorPosition": 36,
+      "referenceRange": {
+        "low": 135,
+        "normal": { "low": 135, "high": 146 },
+        "high": 146
+      },
+      "reasons": [
+        "Dehydration",
+        "Kidney disease",
+        "Adrenal disorders",
+        "Excess fluid loss"
+      ],
+      "reasonIcons": [
+        "💧",
+        "🩺",
+        "🧬",
+        "💦"
+      ],
+      "indications": [
+        "Normal sodium balance",
+        "No electrolyte disturbance"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Potassium",
+      "description": "Potassium is a vital electrolyte for nerve and muscle function, especially the heart. Abnormal levels can cause arrhythmias or muscle weakness. Levels are regulated by the kidneys. Both high and low potassium can be life-threatening.",
+      "value": "4.4",
+      "unit": "mmol/L",
+      "indicatorPosition": 36,
+      "referenceRange": {
+        "low": 3.5,
+        "normal": { "low": 3.5, "high": 5.3 },
+        "high": 5.3
+      },
+      "reasons": [
+        "Kidney dysfunction",
+        "Medications",
+        "Dehydration",
+        "Dietary intake"
+      ],
+      "reasonIcons": [
+        "🩺",
+        "💊",
+        "💧",
+        "🥑"
+      ],
+      "indications": [
+        "Normal potassium level",
+        "No evidence of electrolyte imbalance"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Chloride",
+      "description": "Chloride is an electrolyte that helps maintain acid-base balance and fluid status. It is regulated by the kidneys and is often measured with sodium and potassium. Abnormal levels may indicate metabolic or respiratory disorders.",
+      "value": "104",
+      "unit": "mmol/L",
+      "indicatorPosition": 50,
+      "referenceRange": {
+        "low": 98,
+        "normal": { "low": 98, "high": 110 },
+        "high": 110
+      },
+      "reasons": [
+        "Dehydration",
+        "Kidney disease",
+        "Metabolic acidosis/alkalosis",
+        "Excessive fluid loss"
+      ],
+      "reasonIcons": [
+        "💧",
+        "🩺",
+        "⚖️",
+        "💦"
+      ],
+      "indications": [
+        "Normal chloride level",
+        "No acid-base disturbance"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Albumin, Urine",
+      "description": "Urine albumin measures small amounts of protein in the urine, an early sign of kidney damage. Elevated levels may indicate diabetic nephropathy or hypertension. Normal levels suggest healthy kidney filtration. Used for monitoring chronic kidney disease.",
+      "value": "0.3",
+      "unit": "mg/dL",
+      "indicatorPosition": 0,
+      "referenceRange": {
+        "low": 0,
+        "normal": { "low": 0, "high": 30 },
+        "high": 30
+      },
+      "reasons": [
+        "Diabetes",
+        "Hypertension",
+        "Kidney disease",
+        "Infection"
+      ],
+      "reasonIcons": [
+        "🩸",
+        "💉",
+        "🩺",
+        "🦠"
+      ],
+      "indications": [
+        "No evidence of microalbuminuria",
+        "Normal kidney function"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "Albumin/Creatinine Ratio (Random Urine)",
+      "description": "The urine albumin/creatinine ratio detects early kidney damage, especially in diabetes and hypertension. Normal to mildly increased is <30 mg/g. Moderately increased is 30-299 mg/g. Severely increased is ≥300 mg/g.",
+      "value": "17",
+      "unit": "mg/g",
+      "indicatorPosition": 28,
+      "referenceRange": {
+        "low": 0,
+        "normal": { "low": 0, "high": 30 },
+        "high": 30
+      },
+      "reasons": [
+        "Diabetes",
+        "Hypertension",
+        "Kidney disease",
+        "Infection"
+      ],
+      "reasonIcons": [
+        "🩸",
+        "💉",
+        "🩺",
+        "🦠"
+      ],
+      "indications": [
+        "Normal to mildly increased albuminuria",
+        "No significant kidney damage"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    },
+    {
+      "name": "eGFR",
+      "description": "Estimated glomerular filtration rate (eGFR) assesses kidney function. Values ≥60 mL/min/1.73m2 are considered normal. Lower values indicate chronic kidney disease. Used to stage and monitor renal impairment.",
+      "value": "110",
+      "unit": "mL/min/1.73m2",
+      "indicatorPosition": 83,
+      "referenceRange": {
+        "low": 60,
+        "normal": { "low": 60, "high": 120 },
+        "high": 120
+      },
+      "reasons": [
+        "Chronic kidney disease",
+        "Acute kidney injury",
+        "Dehydration",
+        "Age-related decline"
+      ],
+      "reasonIcons": [
+        "🩺",
+        "⚡",
+        "💧",
+        "👴"
+      ],
+      "indications": [
+        "Normal kidney filtration",
+        "No evidence of chronic kidney disease"
+      ],
+      "indicationIcons": [
+        "✅",
+        "🟢"
+      ]
+    }
+  ]
+}
