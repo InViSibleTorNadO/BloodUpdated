@@ -1,6 +1,6 @@
 # Bloodrest
 
-An Express.js and MongoDB web application for blood report PDF processing.
+An Express.js and MongoDB web application for blood report PDF processing. The app is easy to use and can be used to get detailed info for your report in easy words.
 
 ## Features
 - User login page (no CSS)
